@@ -5,11 +5,14 @@ import 'AddButton.dart';
 class BoilerDisplay extends StatelessWidget {
   final String name;
   final String description;
+  final String type; 
+
 
   const BoilerDisplay({
     super.key,
     required this.name,
     required this.description,
+    required this.type, 
   });
   
   @override
@@ -91,7 +94,6 @@ class _BoilerDetailPageState extends State<BoilerDetailPage> {
           ],
         ),
       ),
-      floatingActionButton: AddButton(onPressed: incrementFuelLevel), // Use incrementFuelLevel function
     );
   }
 }

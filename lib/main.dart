@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'widgets/AddButton.dart';
-import 'widgets/BoilerDisplay.dart'; 
+import 'widgets/Home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'BoilerApp',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -56,10 +56,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<BoilerDisplay> _boilers = [];
-  void _AddBoiler(){
+  final List<HomeDisplay> _homes = [];
+  void _AddHome(String name, String address) {
     setState(() {
-      _boilers.add(BoilerDisplay(name: "Boiler ${_boilers.length}", description: "Boiler makes water hot"));
+        _homes.add(HomeDisplay(name: name, address: address, description: 'Home Description', boilers: []));
     });
   }
 
@@ -68,15 +68,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text('Homes'),
       ),
       body: ListView.builder(
-        itemCount: _boilers.length,
+        itemCount: _homes.length,
         itemBuilder: (context, index) {
-          return _boilers[index];
+          return _homes[index];
         },
       ),
-      floatingActionButton: AddButton(onPressed: _AddBoiler),
+      floatingActionButton: AddButton(onAdd: _AddHome,isHome: true,),
     );
   }
 }
