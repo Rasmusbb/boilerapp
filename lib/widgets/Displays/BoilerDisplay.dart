@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'BoilerGauge.dart';
-import 'AddButton.dart';
+import '../BoilerGauge.dart';
+import '../../logic/API.dart' as api;
 
 class BoilerDisplay extends StatelessWidget {
+  final String boilerID;
   final String name;
   final String description;
   final String type; 
 
-
   const BoilerDisplay({
     super.key,
+    required this.boilerID,
     required this.name,
     required this.description,
     required this.type, 
@@ -48,6 +49,7 @@ class BoilerDetailPage extends StatefulWidget {
   final String name;
   final String description;
 
+
   const BoilerDetailPage({
     super.key,
     required this.name,
@@ -61,6 +63,20 @@ class BoilerDetailPage extends StatefulWidget {
 class _BoilerDetailPageState extends State<BoilerDetailPage> {
   double currentFuelLevel = 0; // Start with an initial fuel level
 
+
+  void initState() {
+    super.initState();
+    getBoilerData();
+    // Simulate fetching the initial fuel level from an API
+    
+  }
+
+  void getBoilerData() {
+    print(widget.key);
+    // Simulate fetching the initial fuel level from an API
+    
+  }
+
   // Function to increment the fuel level by 10
   void incrementFuelLevel() {
     setState(() {
@@ -73,6 +89,7 @@ class _BoilerDetailPageState extends State<BoilerDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isOnline = false; 
     return Scaffold(
       appBar: AppBar(title: Text(widget.name)),
       body: Padding(
@@ -83,12 +100,22 @@ class _BoilerDetailPageState extends State<BoilerDetailPage> {
             Text(widget.name, style: Theme.of(context).textTheme.headlineSmall),
             SizedBox(height: 8),
             Text(widget.description, style: Theme.of(context).textTheme.bodyMedium),
+            Text(
+              isOnline
+                  ? 'Online'
+                  : 'Offline',
+              style: TextStyle(
+                color: isOnline ? Colors.green : Colors.red,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
             SizedBox(height: 16),
             Center(
               child: BoilerGauge(
-                currentValue: currentFuelLevel, // Dynamic value for current fuel level
-                minValue: 0.0, // Minimum value for the gauge
-                maxValue: 100.0, // Maximum value for the gauge
+                currentValue: currentFuelLevel, 
+                minValue: 0.0, 
+                maxValue: 200.0, 
               ),
             ),
           ],

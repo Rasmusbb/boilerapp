@@ -1,82 +1,35 @@
 import 'package:flutter/material.dart';
-import 'widgets/AddButton.dart';
-import 'widgets/Home.dart';
+import 'logic/API.dart' as api;
+import 'widgets/LoginScreen.dart';
+import 'widgets/UserProfil.dart';
 
-void main() {
-  runApp(const MyApp());
+final homeKey = GlobalKey();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  bool loggedIn = false;
+  try {
+    loggedIn = await api.accessTokenVaild().timeout(Duration(seconds: 5));
+  } catch (e) {
+    // handle error if necessary
+  }
+  runApp(MyApp(loggedIn: loggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool loggedIn;
 
-  // This widget is the root of your application.
+  const MyApp({super.key, required this.loggedIn});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'BoilerApp',
+      title: 'Login Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 5, 243, 56)),
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'BoilerApp'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final List<HomeDisplay> _homes = [];
-  void _AddHome(String name, String address) {
-    setState(() {
-        _homes.add(HomeDisplay(name: name, address: address, description: 'Home Description', boilers: []));
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Homes'),
-      ),
-      body: ListView.builder(
-        itemCount: _homes.length,
-        itemBuilder: (context, index) {
-          return _homes[index];
-        },
-      ),
-      floatingActionButton: AddButton(onAdd: _AddHome,isHome: true,),
+      home: loggedIn ? MyHomePage(key: homeKey, title: "Home") : const LoginScreen(),
     );
   }
 }

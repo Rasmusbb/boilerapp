@@ -26,6 +26,7 @@ class BoilerGauge extends StatelessWidget {
       rangeLabel = 'High';
     }
 
+
     return SfRadialGauge(
       axes: <RadialAxis>[
         RadialAxis(

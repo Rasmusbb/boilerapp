@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import '../../logic/API.dart' as api;
+
 
 class AddBoilerDialog extends StatefulWidget {
   final void Function(String name, String type) onSave;
+  final String? deviceId;
+  final String? homeId;
 
-  const AddBoilerDialog({super.key, required this.onSave});
+  const AddBoilerDialog({super.key, required this.onSave,required this.deviceId, required this.homeId});
 
   @override
   State<AddBoilerDialog> createState() => _AddBoilerDialogState();
@@ -16,7 +20,7 @@ class _AddBoilerDialogState extends State<AddBoilerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add Boiler'),
+      title: Text('Boiler Setup'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -47,7 +51,12 @@ class _AddBoilerDialogState extends State<AddBoilerDialog> {
             final type = _selectedType;
 
             if (name.isNotEmpty && type != null) {
-              widget.onSave(name, type);
+              api.post("Homes/AddBoiler", {
+                "boilerName": _nameController.text,
+                "boilerType": _selectedType,
+                "deviceId": widget.deviceId,
+                "homeID": widget.homeId,
+              });
               Navigator.pop(context);
             }
           },
